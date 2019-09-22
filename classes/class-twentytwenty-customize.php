@@ -252,12 +252,18 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 			/**
 			 * Template: Cover Template.
 			 */
+			if ( self::is_cover_template() ) {
+				$description = __( 'Settings for the "Cover Template" page template.', 'twentytwenty' );
+			} else {
+				$description = __( 'You have not set up a cover template for this post or page yet.<br><br>You can do this by editing this post or page and choosing the template \'Cover Template\' in the Page Attributes section. Add a featured image as well if you haven\'t yet for the best experience.', 'twentytwenty' );
+			}
+			
 			$wp_customize->add_section(
 				'cover_template_options',
 				array(
 					'title'       => __( 'Cover Template', 'twentytwenty' ),
 					'capability'  => 'edit_theme_options',
-					'description' => __( 'Settings for the "Cover Template" page template.', 'twentytwenty' ),
+					'description' => $description,
 					'priority'    => 42,
 				)
 			);
@@ -280,6 +286,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 					'section'     => 'cover_template_options',
 					'label'       => __( 'Fixed Background Image', 'twentytwenty' ),
 					'description' => __( 'Creates a parallax effect when the visitor scrolls.', 'twentytwenty' ),
+					'active_callback' => array( __CLASS__, 'is_cover_template' ),
 				)
 			);
 
@@ -320,6 +327,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 						'label'       => __( 'Image Overlay Background Color', 'twentytwenty' ),
 						'description' => __( 'The color used for the featured image overlay. Defaults to the accent color.', 'twentytwenty' ),
 						'section'     => 'cover_template_options',
+						'active_callback' => array( __CLASS__, 'is_cover_template' ),
 					)
 				)
 			);
@@ -342,6 +350,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 						'label'       => __( 'Image Overlay Text Color', 'twentytwenty' ),
 						'description' => __( 'The color used for the text in the featured image overlay.', 'twentytwenty' ),
 						'section'     => 'cover_template_options',
+						'active_callback' => array( __CLASS__, 'is_cover_template' ),
 					)
 				)
 			);
@@ -381,6 +390,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 						'color'       => __( 'Color', 'twentytwenty' ),
 						'luminosity'  => __( 'Luminosity', 'twentytwenty' ),
 					),
+					'active_callback' => array( __CLASS__, 'is_cover_template' ),
 				)
 			);
 
@@ -414,6 +424,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 						'90'  => __( '90%', 'twentytwenty' ),
 						'100' => __( '100%', 'twentytwenty' ),
 					),
+					'active_callback' => array( __CLASS__, 'is_cover_template' ),
 				)
 			);
 
@@ -473,6 +484,19 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 			return ( ( isset( $checked ) && true === $checked ) ? true : false );
 		}
 
+		/**
+		 * Active callback for displaying the Cover Template controls conditionally.
+		 */
+		public static function is_cover_template() {
+			return is_page_template( 'templates/template-cover.php' );
+		}
+		
+		/**
+		 * Active callback for displaying the Cover Template controls conditionally.
+		 */
+		public static function is_not_cover_template() {
+			return ! is_page_template( 'templates/template-cover.php' );
+		}
 	}
 
 	// Setup the Theme Customizer settings and controls.
