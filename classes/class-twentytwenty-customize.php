@@ -259,6 +259,7 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 					'capability'  => 'edit_theme_options',
 					'description' => __( 'Settings for the "Cover Template" page template.', 'twentytwenty' ),
 					'priority'    => 42,
+					'active_callback' => array( __CLASS__, 'is_cover_template' ),
 				)
 			);
 
@@ -471,6 +472,13 @@ if ( ! class_exists( 'TwentyTwenty_Customize' ) ) {
 		 */
 		public static function sanitize_checkbox( $checked ) {
 			return ( ( isset( $checked ) && true === $checked ) ? true : false );
+		}
+		
+		/**
+		 * Active callback for displaying the Cover Template section conditionally.
+		 */
+		public static function is_cover_template() {
+			return is_page_template( 'templates/template-cover.php' );
 		}
 
 	}
